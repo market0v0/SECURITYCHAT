@@ -21,9 +21,10 @@ def send_message():
     if message == '/start':
         response =  'Choose encryption type /ceasar, /play, /poly'
         return jsonify({'response': response})
-    elif messages[-2] == '/start':
-        response = typesCode(message)
-        return jsonify({'response': response})
+    elif len(messages) == 2:
+        if messages[-2] == '/start':
+            response = typesCode(message)
+            return jsonify({'response': response})
     
     elif message == '1':      
         if(len(type) != 0 ):
