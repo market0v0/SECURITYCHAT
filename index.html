@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flask Chatbot</title>
+    <style>
+        #chat-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+        #chat-history {
+            width: 500px;
+            height: 300px;
+            border: 1px solid #000000;
+            background-color: #000000;
+            color: aliceblue;
+            padding: 10px;
+            overflow-y: scroll;
+        }
+        #chat-form {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        #message {
+            width: 300px;
+            height: 30px;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ecd1d1;
+            margin-right: 10px;
+            color: rgb(0, 0, 0);
+        }
+        #send-btn {
+            width: 80px;
+            height: 30px;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+        #send-btn:hover {
+            background-color: #3e8e41;
+        }
+        #clear-btn {
+            width: 80px;
+            height: 30px;
+            background-color: #f44336;
+            color: white;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        #clear-btn:hover {
+            background-color: #c62828;
+        }
+        #header {
+            background-color: #28c652;
+            width: 250px;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="chat-container">
+        <h1 id = "header">SECURITY BOT</h1>
+        <div id="chat-history">
+        </div>
+        <div id="chat-form">
+            <input type="text" id="message" placeholder="ENTER MESSAGES type /help for assistance">
+            <button id="send-btn">Send</button>
+            <button id="clear-btn">Clear Chat</button>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#send-btn').click(sendMessage);
+            $('#message').keypress(function(event) {
+                if (event.keyCode == 13 || event.which == 13) {
+                    sendMessage();
+                }
+            });
+            $('#clear-btn').click(function() {
+                $('#chat-history').empty();
+            });
+        });
+        
+        function sendMessage() {
+            var message = $('#message').val();
+            if (message) {
+                $('#chat-history').append('<p><strong>You:</strong> ' + message + '</p>');
+                $.ajax({
+                    type: 'POST',
+                    url: '/send_message',
+                    data: {'message': message},
+                    success: function(data) {
+                        $('#chat-history').append('<p><strong>CHECK: </strong> ' + data['response'] + '</p>');
+                    }
+                });
+                $('#message').val('');
+            }
+        }
+    </script>
+</body>
+</html>
